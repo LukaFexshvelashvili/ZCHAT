@@ -2,12 +2,24 @@ type TMessageBox = {
   own: boolean;
   time: string;
   text: string;
+  seen: boolean;
+  isLast: boolean;
 };
 
-export default function MessageBox({ own, time, text }: TMessageBox) {
+export default function MessageBox({
+  own,
+  time,
+  text,
+  seen,
+  isLast,
+}: TMessageBox) {
+  console.log(isLast);
+
   return own ? (
     <div className="flex items-center justify-end w-auto">
-      <p className="text-sm text-timeText mx-3">{time}</p>
+      <p className="text-sm text-timeText mx-3">
+        {isLast ? (seen ? "seen" : "sent") : null} {time}
+      </p>
       <div className="px-3 py-2 bg-myTextBox rounded-xl text-myText">
         {text}
       </div>

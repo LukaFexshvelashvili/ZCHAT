@@ -7,6 +7,7 @@ export const userContext = createContext<any>(null);
 
 function App() {
   const [user, setUser] = useState<any>(null);
+  const [activeChat, setActiveChat] = useState<any>(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -16,7 +17,7 @@ function App() {
   });
 
   return (
-    <userContext.Provider value={user}>
+    <userContext.Provider value={{ user, activeChat, setActiveChat }}>
       {user ? <ChatRoom /> : <Login />}
     </userContext.Provider>
   );

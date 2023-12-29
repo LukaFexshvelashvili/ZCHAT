@@ -1,23 +1,30 @@
 import { useContext, useEffect, useState } from "react";
-import { listenMessages } from "../../../api/apifunctions";
+import { fetchMessages, setSeen } from "../../../api/apifunctions";
 import DialogStarter from "./assets/DialogStarter";
 import MessageBox from "./assets/MessageBox";
 import { userContext } from "../../../App";
 
 export default function Dialog(props: { dialogBox: any }) {
-  const User = useContext(userContext);
   const [messages, setMessages] = useState<any>([]);
-
+  const User = useContext(userContext);
+  useEffect(() => {
+    window.onclick = () => {
+      setSeen(User.activeChat);
+    };
+  }, []);
   const getDown = () => {
     if (props.dialogBox.current) {
       props.dialogBox.current.scrollBy(0, 150);
     }
   };
-  listenMessages(setMessages, getDown);
+
+  fetchMessages(setMessages, getDown, User.activeChat);
+
   useEffect(() => {
     if (props.dialogBox.current) {
       props.dialogBox.current.scrollBy(0, 99999);
     }
+    setSeen(User.activeChat);
   }, [messages]);
 
   return (
@@ -31,8 +38,10 @@ export default function Dialog(props: { dialogBox: any }) {
           ? messages.map((e: any, i: number) => (
               <MessageBox
                 key={i}
-                own={User.uid == e.data.uId}
+                own={User.user.uid == e.data.uId}
                 text={e.data.text}
+                seen={e.data.seen}
+                isLast={messages.length - 1 == i}
                 time={
                   e.data.sendTime
                     ? getTime(

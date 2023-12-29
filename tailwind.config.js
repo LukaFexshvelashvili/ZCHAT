@@ -26,6 +26,8 @@ export default {
         userInfoBlock: "rgba(38, 38, 38, 1)",
         nameText: "rgba(255, 255, 255, 0.8)",
         subText: "rgba(255, 255, 255, 0.6)",
+        startText: "rgba(155, 28, 255, 1)",
+        startBg: "rgba(155, 28, 255, 0.1)",
       },
     },
   },

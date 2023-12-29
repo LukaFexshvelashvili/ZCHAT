@@ -1,18 +1,29 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   addDoc,
+  and,
   collection,
+  doc,
+  getDocs,
   getFirestore,
   onSnapshot,
+  or,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
+  where,
 } from "firebase/firestore";
 import notificationSound from "../assets/sounds/notification.wav";
 import { auth, app } from "./firebase";
 import { useEffect } from "react";
+export const db = getFirestore(app);
 
-const db = getFirestore(app);
+export const getChats = async (setAccounts: Function) => {
+  const q = query(collection(db, "accounts"), orderBy("created"));
+  const accountsQuery = await getDocs(q);
+  setAccounts(accountsQuery.docs);
+};
 
 let isWindowFocused = true;
 let notifyCount = 0;
@@ -24,41 +35,80 @@ window.onfocus = () => {
   notifyCount = 0;
   document.title = `ZCHAT`;
 };
-
-const playSound = () => {
-  new Audio(notificationSound).play();
-};
-
-export const listenMessages = (
+export const fetchMessages = (
   getUpdatedMessages: Function,
-  effect: Function
+  effect: Function,
+  chatTo: string
 ) => {
   useEffect(() => {
-    const q = query(collection(db, "messages"), orderBy("sendTime"));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      getUpdatedMessages(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          data: doc.data(),
-        }))
+    if (chatTo) {
+      const q = query(
+        collection(db, "messages"),
+
+        or(
+          and(
+            where("uId", "==", chatTo),
+            where("chatTo", "==", auth.currentUser?.uid)
+          ),
+          and(
+            where("uId", "==", auth.currentUser?.uid),
+            where("chatTo", "==", chatTo)
+          )
+        ),
+        orderBy("sendTime")
       );
-      if (isWindowFocused == false) {
+
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        getUpdatedMessages(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      });
+
+      return unsubscribe;
+    }
+  }, [chatTo]);
+  effect();
+};
+
+export const listenMessages = () => {
+  useEffect(() => {
+    const q = query(
+      collection(db, "messages"),
+      where("chatTo", "==", auth.currentUser?.uid)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      if (
+        !isWindowFocused &&
+        snapshot.docs[snapshot.docs.length - 1].data().uId !==
+          auth.currentUser?.uid
+      ) {
+        new Audio(notificationSound).play();
         notifyCount++;
-        playSound();
-        document.title = `(${notifyCount}) New Message`;
+        document.title = `(${notifyCount}) New Message${
+          notifyCount > 1 ? "s" : ""
+        }`;
       }
     });
 
     return unsubscribe;
   }, []);
-  effect();
 };
 
-export const sendMessage = async (user: any, message: string) => {
+export const sendMessage = async (
+  user: any,
+  message: string,
+  messageTo: string
+) => {
   await addDoc(collection(db, "messages"), {
     uId: user.uid,
     uImage: user.photoURL,
     text: message,
+    chatTo: messageTo,
+    seen: false,
     sendTime: serverTimestamp(),
   });
 };
@@ -66,8 +116,49 @@ export const sendMessage = async (user: any, message: string) => {
 export const handleGoogleLogin = async () => {
   const provider = new GoogleAuthProvider();
   try {
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+
+    if (result) {
+      CheckLogin(result);
+    }
   } catch (error) {
     console.log(error);
+  }
+};
+
+async function CheckLogin(result: any) {
+  const q = query(
+    collection(db, "accounts"),
+    where("uId", "==", result.user.uid)
+  );
+  const querySnapshot = await getDocs(q);
+  if (querySnapshot.empty) {
+    await addDoc(collection(db, "accounts"), {
+      uName: result.user.displayName,
+      uImage: result.user.photoURL,
+      uId: result.user.uid,
+      active: true,
+      lastActive: serverTimestamp(),
+      created: serverTimestamp(),
+    });
+  }
+}
+
+export const setSeen = async (chatTo: string) => {
+  if (isWindowFocused) {
+    const messagesCollection = collection(db, "messages");
+
+    const q = query(
+      messagesCollection,
+      where("seen", "==", false),
+      where("uId", "==", chatTo),
+      where("chatTo", "==", auth.currentUser?.uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async (snap) => {
+      const messageDocRef = doc(messagesCollection, snap.id);
+      await updateDoc(messageDocRef, { seen: true, notified: true });
+    });
   }
 };
