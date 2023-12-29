@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: main;
+  src: url("./fonts/Poppins-Medium.ttf");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: #151515;
+  font-family: main;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.iconButton {
+  @apply h-[60px] aspect-square rounded-xl bg-buttonBg flex justify-center items-center border-none outline-none cursor-pointer transition-colors hover:bg-buttonHover;
+}
