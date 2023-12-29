@@ -7,6 +7,7 @@ import { userContext } from "../../../App";
 export default function Dialog(props: { dialogBox: any }) {
   const User = useContext(userContext);
   const [messages, setMessages] = useState<any>([]);
+
   const getDown = () => {
     if (props.dialogBox.current) {
       props.dialogBox.current.scrollBy(0, 150);

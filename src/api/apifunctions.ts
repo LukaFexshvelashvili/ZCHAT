@@ -1,8 +1,4 @@
-import {
-  GoogleAuthProvider,
-  onAuthStateChanged,
-  signInWithPopup,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -12,14 +8,26 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
+import notificationSound from "../assets/sounds/notification.wav";
+import { auth, app } from "./firebase";
+import { useEffect } from "react";
 
 const db = getFirestore(app);
 
-import { auth, app } from "./firebase";
-import { useEffect, useState } from "react";
-// const [newMessage, setNewMessage] = useState<string>("");
+let isWindowFocused = true;
+let notifyCount = 0;
+window.onblur = () => {
+  isWindowFocused = false;
+};
+window.onfocus = () => {
+  isWindowFocused = true;
+  notifyCount = 0;
+  document.title = `ZCHAT`;
+};
 
-//
+const playSound = () => {
+  new Audio(notificationSound).play();
+};
 
 export const listenMessages = (
   getUpdatedMessages: Function,
@@ -34,6 +42,11 @@ export const listenMessages = (
           data: doc.data(),
         }))
       );
+      if (isWindowFocused == false) {
+        notifyCount++;
+        playSound();
+        document.title = `(${notifyCount}) New Message`;
+      }
     });
 
     return unsubscribe;
@@ -53,28 +66,8 @@ export const sendMessage = async (user: any, message: string) => {
 export const handleGoogleLogin = async () => {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   } catch (error) {
     console.log(error);
   }
 };
-
-//  FETCH MESSAGES
-
-//   {messages.map((msg: any, i: number) => (
-//     <div key={i} className="">
-//       {msg.data.text}
-//     </div>
-//   ))}
-
-// INPUT
-
-//  <input
-//     type="text"
-//     value={newMessage}
-//     onChange={(e) => setNewMessage(e.target.value)}
-//   />
-
-// LOGOUT
-
-// <button onClick={() => auth.signOut()}>log out</button>

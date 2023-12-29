@@ -2,8 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./api/firebase";
 import ChatRoom from "./pages/ChatRoom/ChatRoom";
-import Login from "./pages/Login/login";
-
+import Login from "./pages/Login/Login";
 export const userContext = createContext<any>(null);
 
 function App() {
