@@ -17,12 +17,14 @@ const db = getFirestore(app);
 
 import { auth, app } from "./firebase";
 import { useEffect, useState } from "react";
-// const [messages, setMessages] = useState<any>([]);
-const [newMessage, setNewMessage] = useState<string>("");
+// const [newMessage, setNewMessage] = useState<string>("");
 
 //
 
-export const listenMessages = (getUpdatedMessages: Function) => {
+export const listenMessages = (
+  getUpdatedMessages: Function,
+  effect: Function
+) => {
   useEffect(() => {
     const q = query(collection(db, "messages"), orderBy("sendTime"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -33,8 +35,10 @@ export const listenMessages = (getUpdatedMessages: Function) => {
         }))
       );
     });
+
     return unsubscribe;
   }, []);
+  effect();
 };
 
 export const sendMessage = async (user: any, message: string) => {

@@ -6,10 +6,12 @@ import {
   SunIcon,
   UserIcon,
 } from "../icons/icons";
+import { auth } from "../api/firebase";
 
 export default function Navbar() {
+  // const User = useContext(userContext);
   return (
-    <div className="min-h-full bg-navBg w-[150px] rounded-r-[35px] absolute left-0 shadow-[25px_0px_40px_0px_rgba(0,0,0,0.05)] z-30">
+    <div className="min-h-full bg-navBg w-[150px] rounded-r-[35px] fixed left-0 shadow-[25px_0px_40px_0px_rgba(0,0,0,0.05)] z-30">
       <div className="flex flex-col items-center justify-between min-h-screen py-9 ">
         <div className="flex flex-col items-center gap-[25px]">
           <div className=" cursor-pointer profileIcon bg-gradient-to-br from-[rgba(28,255,200,1)] to-[rgba(0,87,255,1)] h-[60px] aspect-square rounded-xl  flex justify-center items-center ">
@@ -29,7 +31,7 @@ export default function Navbar() {
           <button className="iconButton">
             <SettingsIcon className=" h-[33px] aspect-square" />
           </button>
-          <button className="iconButton">
+          <button className="iconButton" onClick={() => auth.signOut()}>
             <LogoutIcon className=" h-[33px] aspect-square" />
           </button>
         </div>

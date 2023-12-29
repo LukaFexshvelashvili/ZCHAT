@@ -6,6 +6,7 @@ export default {
       colors: {
         navBg: "#212121",
         listBg: "#1D1D1D",
+        myTextBox: "#1D1D1D",
         inputBg: "rgba(25, 25, 25, 1)",
         inputBgFocus: "rgba(30, 30, 30, 1)",
         inputBorder: "rgba(56, 56, 56, 1)",
@@ -24,6 +25,7 @@ export default {
         timeText: "rgba(255, 255, 255, 0.3)",
         userInfoBlock: "rgba(38, 38, 38, 1)",
         nameText: "rgba(255, 255, 255, 0.8)",
+        subText: "rgba(255, 255, 255, 0.6)",
       },
     },
   },

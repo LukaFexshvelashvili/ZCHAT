@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./api/firebase";
 import ChatRoom from "./pages/ChatRoom/ChatRoom";
+import Login from "./pages/Login/login";
+
+export const userContext = createContext<any>(null);
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -14,10 +17,9 @@ function App() {
   });
 
   return (
-    <>
-      {/* {user ? <></> : <></>} */}
-      <ChatRoom />
-    </>
+    <userContext.Provider value={user}>
+      {user ? <ChatRoom /> : <Login />}
+    </userContext.Provider>
   );
 }
 
