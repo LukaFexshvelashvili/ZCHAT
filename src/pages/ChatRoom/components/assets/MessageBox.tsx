@@ -13,8 +13,6 @@ export default function MessageBox({
   seen,
   isLast,
 }: TMessageBox) {
-  console.log(isLast);
-
   return own ? (
     <div className="flex items-center justify-end w-auto">
       <p className="text-sm text-timeText mx-3">

@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        bg: "#151515",
         navBg: "#212121",
         listBg: "#1D1D1D",
         myTextBox: "#1D1D1D",

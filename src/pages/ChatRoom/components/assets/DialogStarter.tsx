@@ -12,7 +12,6 @@ export default function DialogStarter() {
     });
   }, []);
 
-  console.log(characterData);
 
   return (
     <div className="mb-10">

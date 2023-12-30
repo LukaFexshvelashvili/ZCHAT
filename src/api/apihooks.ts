@@ -18,31 +18,30 @@ export const listenLastMessages = (
   chatTo: string
 ) => {
   useEffect(() => {
-    if (chatTo) {
+    let initialLoad = true;
+
+    if (chatTo && auth.currentUser?.uid) {
+      const uID = auth.currentUser?.uid;
+
       const q = query(
         collection(db, "messages"),
-
-        or(
-          and(
-            where("uId", "==", chatTo),
-            where("chatTo", "==", auth.currentUser?.uid)
-          ),
-          and(
-            where("uId", "==", auth.currentUser?.uid),
-            where("chatTo", "==", chatTo)
-          )
-        ),
+        where("chatTo", "in", [chatTo, uID]),
+        where("uId", "in", [chatTo, uID]),
         orderBy("sendTime", "desc"),
         limit(1)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (initialLoad) {
+          initialLoad = false;
+          return;
+        }
         getLastMessages({
           sender: snapshot.docs[0]?.data().uId,
           text: snapshot.docs[0]?.data().text,
           seen: snapshot.docs[0]?.data().seen,
         });
+        initialLoad = true;
       });
-
       return unsubscribe;
     }
   }, []);

@@ -13,7 +13,6 @@
   box-sizing: border-box;
 }
 body {
-  background-color: #151515;
   font-family: main;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -30,6 +29,41 @@ body {
 .chatDialog::-webkit-scrollbar-thumb:hover {
   background-color: rgba(47, 47, 47, 0.4);
 }
+.geC {
+  border: 12px solid transparent;
+  border-top: 12px solid rgba(28, 160, 255, 1);
+  border-bottom: 12px solid rgba(28, 160, 255, 1);
+  animation: loader 1.6s infinite linear;
+}
+.geCLast {
+  border: 12px solid transparent;
+  border-top: 12px solid rgba(28, 160, 255, 1);
+  border-bottom: 12px solid rgba(28, 160, 255, 1);
+  animation: loader 1.6s 1 linear;
+}
+.skelLoading {
+  animation: skeleton 2s infinite ease-in-out;
+}
 .iconButton {
   @apply h-[60px] aspect-square rounded-xl bg-buttonBg flex justify-center items-center border-none outline-none cursor-pointer transition-colors hover:bg-buttonHover;
+}
+
+@keyframes loader {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes skeleton {
+  0% {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }

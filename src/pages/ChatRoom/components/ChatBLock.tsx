@@ -4,6 +4,12 @@ import { userContext } from "../../../App";
 import { listenLastMessages } from "../../../api/apihooks";
 import { auth } from "../../../api/firebase";
 
+type TLastMessage = {
+  text: string;
+  seen: boolean;
+  sender: string | null;
+};
+
 export default function ChatBLock(props: {
   blockId: string;
   blockActive: string;
@@ -11,11 +17,12 @@ export default function ChatBLock(props: {
   groupChat?: boolean;
   name: string;
   blockImage: string;
+  setChatLoader: Function;
 }) {
-  const [lastMessage, setLastMessage] = useState({
+  const [lastMessage, setLastMessage] = useState<TLastMessage>({
     text: "",
     seen: true,
-    sender: "",
+    sender: null,
   });
 
   const User = useContext(userContext);
@@ -27,8 +34,9 @@ export default function ChatBLock(props: {
       onClick={() => {
         props.setBlockActive(props.blockId);
         User.setActiveChat(props.blockId);
+        props.setChatLoader(true);
       }}
-      className={`flex items-center px-5 py-8 rounded-3xl w-full h-[95px] relative  cursor-pointer transition-colors hover:bg-chatActiveBg ${
+      className={`flex items-center px-5 py-8 rounded-3xl w-full h-[95px] relative  cursor-pointer transition-colors duration-[0.05s] hover:bg-chatActiveBg ${
         ifSeen == false
           ? "bg-chatActiveBg"
           : props.blockActive === props.blockId
@@ -57,14 +65,18 @@ export default function ChatBLock(props: {
           )}
         </div>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col w-full">
         <p className=" text-white text-lg ml-5 tracking-wider">{props.name}</p>
         <p
           className={`  text-sm ml-5 tracking-wider mb-3 ${
             ifSeen == false ? "text-white" : "text-myText"
           }`}
         >
-          {lastMessage.text}
+          {lastMessage.sender ? (
+            lastMessage.text
+          ) : (
+            <div className="h-5 w-24 rounded-md skelLoading"></div>
+          )}
         </p>
       </div>
       {ifSeen == false ? (

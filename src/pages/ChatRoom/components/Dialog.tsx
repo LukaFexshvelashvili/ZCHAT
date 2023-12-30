@@ -4,7 +4,10 @@ import DialogStarter from "./assets/DialogStarter";
 import MessageBox from "./assets/MessageBox";
 import { userContext } from "../../../App";
 
-export default function Dialog(props: { dialogBox: any }) {
+export default function Dialog(props: {
+  dialogBox: any;
+  setChatLoader: Function;
+}) {
   const [messages, setMessages] = useState<any>([]);
   const User = useContext(userContext);
   useEffect(() => {
@@ -17,14 +20,17 @@ export default function Dialog(props: { dialogBox: any }) {
       props.dialogBox.current.scrollBy(0, 150);
     }
   };
-
   fetchMessages(setMessages, getDown, User.activeChat);
 
   useEffect(() => {
     if (props.dialogBox.current) {
       props.dialogBox.current.scrollBy(0, 99999);
+      props.setChatLoader(false);
     }
-    setSeen(User.activeChat);
+
+    if (messages) {
+      setSeen(User.activeChat);
+    }
   }, [messages]);
 
   return (

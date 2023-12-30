@@ -35,38 +35,36 @@ window.onfocus = () => {
   notifyCount = 0;
   document.title = `ZCHAT`;
 };
-export const fetchMessages = (
+export const fetchMessages = async (
   getUpdatedMessages: Function,
   effect: Function,
   chatTo: string
 ) => {
   useEffect(() => {
-    if (chatTo) {
+    let initialLoad = true;
+    if (chatTo && auth.currentUser?.uid) {
+      const uID = auth.currentUser?.uid;
       const q = query(
         collection(db, "messages"),
-
-        or(
-          and(
-            where("uId", "==", chatTo),
-            where("chatTo", "==", auth.currentUser?.uid)
-          ),
-          and(
-            where("uId", "==", auth.currentUser?.uid),
-            where("chatTo", "==", chatTo)
-          )
-        ),
+        where("chatTo", "in", [chatTo, uID]),
+        where("uId", "in", [chatTo, uID]),
         orderBy("sendTime")
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (initialLoad) {
+          initialLoad = false;
+          return;
+        }
+
         getUpdatedMessages(
           snapshot.docs.map((doc) => ({
             id: doc.id,
             data: doc.data(),
           }))
         );
+        initialLoad = true;
       });
-
       return unsubscribe;
     }
   }, [chatTo]);
