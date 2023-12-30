@@ -1,10 +1,12 @@
 import {
   collection,
+  doc,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { useEffect } from "react";
@@ -16,8 +18,6 @@ export const listenLastMessages = (
   chatTo: string
 ) => {
   useEffect(() => {
-    // let initialLoad = true;
-
     if (chatTo && auth.currentUser?.uid) {
       const uID = auth.currentUser?.uid;
 
@@ -45,7 +45,6 @@ export const listenLastMessages = (
         });
       });
       return unsubscribe;
-      // initialLoad = true;
     }
   }, []);
 };
@@ -59,3 +58,37 @@ export const getCharData = async (uID: string) => {
     console.log(error);
   }
 };
+export const addConversation = async (uID: string) => {
+  if (uID !== auth.currentUser?.uid) {
+    const myDataFetch = query(
+      collection(db, "accounts"),
+      where("uId", "==", auth.currentUser?.uid),
+      limit(1)
+    );
+    const myData = await getDocs(myDataFetch);
+    let myFriendsList = myData.docs[0].data().friends;
+    if (!myFriendsList.includes(uID)) {
+      console.log("you dont have this friend");
+      const q = query(collection(db, "accounts"), where("uId", "==", uID));
+      const getData = await getDocs(q);
+      if (!getData.empty) {
+        const docRef = doc(db, "accounts", getData.docs[0].id);
+        await updateDoc(docRef, {
+          friends: [...getData.docs[0].data().friends, auth.currentUser?.uid],
+        });
+      } else {
+        return 2;
+      }
+      const docRef = doc(db, "accounts", myData.docs[0].id);
+      await updateDoc(docRef, {
+        friends: [...myData.docs[0].data().friends, uID],
+      });
+      return 10;
+    } else {
+      return 5;
+    }
+  } else {
+    return 3;
+  }
+};
+const addFriend = async (id: string) => {};

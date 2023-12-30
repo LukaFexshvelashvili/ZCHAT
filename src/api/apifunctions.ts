@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -18,10 +19,37 @@ import { auth, app } from "./firebase";
 import { useEffect } from "react";
 export const db = getFirestore(app);
 
-export const getChats = async (setAccounts: Function) => {
-  const q = query(collection(db, "accounts"), orderBy("created"));
-  const accountsQuery = await getDocs(q);
-  setAccounts(accountsQuery.docs);
+// export const getChats = async (setAccounts: Function) => {
+//   const q = query(collection(db, "accounts"), orderBy("created"));
+//   const accountsQuery = await getDocs(q);
+//   setAccounts(accountsQuery.docs);
+// };
+export const getFriendChats = async (setAccounts: Function) => {
+  const myDataFetch = query(
+    collection(db, "accounts"),
+    where("uId", "==", auth.currentUser?.uid),
+    limit(1)
+  );
+  const myData = await getDocs(myDataFetch);
+  if (!myData.empty) {
+    const q = query(
+      collection(db, "accounts"),
+      where(
+        "uId",
+        "in",
+        myData.docs[0].data().friends.length == 0
+          ? [""]
+          : myData.docs[0].data().friends
+      )
+    );
+
+    const accountsQuery = await getDocs(q);
+    if (!accountsQuery.empty) {
+      setAccounts(accountsQuery.docs);
+    } else {
+      setAccounts([]);
+    }
+  }
 };
 
 let isWindowFocused = true;
@@ -82,6 +110,39 @@ export const fetchMessages = async (
     }
   }, [chatTo]);
   effect();
+};
+
+export const fetchChats = async (getUpdatedChats: Function) => {
+  useEffect(() => {
+    const myDataFetch = query(
+      collection(db, "accounts"),
+      where("uId", "==", auth.currentUser?.uid),
+      limit(1)
+    );
+    getDocs(myDataFetch).then((data) => {
+      if (!data.empty) {
+        const q = query(
+          collection(db, "accounts"),
+          where(
+            "uId",
+            "in",
+            data.docs[0].data().friends.length == 0
+              ? [""]
+              : data.docs[0].data().friends
+          )
+        );
+        const unsubscribe = onSnapshot(q, (snapshot) =>
+          getUpdatedChats(
+            snapshot.docs.map((doc) => ({
+              id: doc.id,
+              data: doc.data(),
+            }))
+          )
+        );
+        return unsubscribe;
+      }
+    });
+  }, []);
 };
 
 export const listenMessages = () => {
@@ -155,6 +216,7 @@ async function CheckLogin(result: any) {
       uImage: result.user.photoURL,
       uId: result.user.uid,
       active: true,
+      friends: [],
       lastActive: serverTimestamp(),
       created: serverTimestamp(),
     });

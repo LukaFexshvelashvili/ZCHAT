@@ -31,6 +31,7 @@ export default {
         startBg: "rgba(155, 28, 255, 0.1)",
         heartButton: "rgba(255, 255, 255, 0.20)",
         replyToText: "rgba(255, 255, 255, 0.3)",
+        addBlock: "#272727",
       },
     },
   },

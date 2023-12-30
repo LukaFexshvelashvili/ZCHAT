@@ -18,9 +18,12 @@ function App() {
       else setUser(null);
       setLoaderShow(false);
     });
-  });
+  }, []);
+
   return (
-    <userContext.Provider value={{ user, activeChat, setActiveChat }}>
+    <userContext.Provider
+      value={{ user, activeChat, setActiveChat, setLoaderShow }}
+    >
       <Loader show={loaderShow} />
       {user ? <ChatRoom /> : <Login />}
     </userContext.Provider>
