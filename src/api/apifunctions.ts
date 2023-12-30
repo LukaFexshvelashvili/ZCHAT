@@ -154,6 +154,7 @@ export const listenMessages = () => {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       if (
+        snapshot.docs.length !== 0 &&
         !isWindowFocused &&
         snapshot.docs[snapshot.docs.length - 1].data().uId !==
           auth.currentUser?.uid

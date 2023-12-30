@@ -68,7 +68,6 @@ export const addConversation = async (uID: string) => {
     const myData = await getDocs(myDataFetch);
     let myFriendsList = myData.docs[0].data().friends;
     if (!myFriendsList.includes(uID)) {
-      console.log("you dont have this friend");
       const q = query(collection(db, "accounts"), where("uId", "==", uID));
       const getData = await getDocs(q);
       if (!getData.empty) {
@@ -91,4 +90,3 @@ export const addConversation = async (uID: string) => {
     return 3;
   }
 };
-const addFriend = async (id: string) => {};

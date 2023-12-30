@@ -63,9 +63,9 @@ export default function ChatList(props: { setChatLoader: Function }) {
             ) : null;
           })}
         </div>
-        <h3 className=" text-2xl tracking-wider mb-5">Group Chats</h3>
-        <div className="flex flex-col mb-8 gap-3">
-          {/* {chats.map((e, i) => (
+        {/* <h3 className=" text-2xl tracking-wider mb-5">Group Chats</h3> */}
+        {/* <div className="flex flex-col mb-8 gap-3"> */}
+        {/* {chats.map((e, i) => (
           <ChatBLock
             key={i}
             blockActive={blockActive}
@@ -74,7 +74,7 @@ export default function ChatList(props: { setChatLoader: Function }) {
             groupChat={true}
           />
         ))} */}
-        </div>
+        {/* </div> */}
         <button
           onClick={() => setAddBlock(true)}
           className=" cursor-pointer bg-buttonBg transition-colors py-4 w-full flex items-center rounded-xl px-8 hover:bg-buttonHover"
