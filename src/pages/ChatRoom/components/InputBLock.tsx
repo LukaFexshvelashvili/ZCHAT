@@ -8,10 +8,12 @@ export default function InputBLock(props: { dialogBox: any }) {
   const [message, setMessage] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    sendMessage(User.user, message, User.activeChat);
-    setMessage("");
-    if (props.dialogBox.current) {
-      props.dialogBox.current.scrollBy(0, 999);
+    if (message !== "" && message.replace(/\s+/g, "").length !== 0) {
+      sendMessage(User.user, message, User.activeChat);
+      setMessage("");
+      if (props.dialogBox.current) {
+        props.dialogBox.current.scrollBy(0, 999);
+      }
     }
   };
   return (

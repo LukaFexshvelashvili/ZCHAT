@@ -10,8 +10,7 @@ export default function DialogStarter() {
     getCharData(User.activeChat).then((querySnapshot) => {
       setCharacterData(querySnapshot);
     });
-  }, []);
-
+  }, [User.activeChat]);
 
   return (
     <div className="mb-10">

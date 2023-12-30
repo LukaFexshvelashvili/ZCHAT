@@ -1,13 +1,11 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import {
   addDoc,
-  and,
   collection,
   doc,
   getDocs,
   getFirestore,
   onSnapshot,
-  or,
   orderBy,
   query,
   serverTimestamp,
@@ -52,6 +50,10 @@ export const fetchMessages = async (
       );
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
+        if (snapshot.docs.length == 0) {
+          getUpdatedMessages([]);
+        }
+
         if (initialLoad) {
           initialLoad = false;
           return;
@@ -101,14 +103,16 @@ export const sendMessage = async (
   message: string,
   messageTo: string
 ) => {
-  await addDoc(collection(db, "messages"), {
-    uId: user.uid,
-    uImage: user.photoURL,
-    text: message,
-    chatTo: messageTo,
-    seen: false,
-    sendTime: serverTimestamp(),
-  });
+  if (message !== "" && message.replace(/\s+/g, "").length !== 0) {
+    await addDoc(collection(db, "messages"), {
+      uId: user.uid,
+      uImage: user.photoURL,
+      text: message,
+      chatTo: messageTo,
+      seen: false,
+      sendTime: serverTimestamp(),
+    });
+  }
 };
 
 export const handleGoogleLogin = async () => {

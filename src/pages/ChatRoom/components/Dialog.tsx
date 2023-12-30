@@ -25,6 +25,7 @@ export default function Dialog(props: {
   useEffect(() => {
     if (props.dialogBox.current) {
       props.dialogBox.current.scrollBy(0, 99999);
+
       props.setChatLoader(false);
     }
 

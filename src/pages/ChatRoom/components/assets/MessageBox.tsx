@@ -16,7 +16,14 @@ export default function MessageBox({
   return own ? (
     <div className="flex items-center justify-end w-auto">
       <p className="text-sm text-timeText mx-3">
-        {isLast ? (seen ? "seen" : "sent") : null} {time}
+        {isLast
+          ? time !== "Sending..."
+            ? seen
+              ? "seen"
+              : "sent"
+            : ""
+          : null}{" "}
+        {time}
       </p>
       <div className="px-3 py-2 bg-myTextBox rounded-xl text-myText">
         {text}

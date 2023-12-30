@@ -1,10 +1,8 @@
 import {
-  and,
   collection,
   getDocs,
   limit,
   onSnapshot,
-  or,
   orderBy,
   query,
   where,
@@ -31,15 +29,21 @@ export const listenLastMessages = (
         limit(1)
       );
       const unsubscribe = onSnapshot(q, (snapshot) => {
-        if (initialLoad) {
-          initialLoad = false;
+        if (snapshot.docs.length == 0) {
+          getLastMessages({
+            sender: "none",
+            text: "",
+            seen: true,
+          });
           return;
         }
+
         getLastMessages({
           sender: snapshot.docs[0]?.data().uId,
           text: snapshot.docs[0]?.data().text,
           seen: snapshot.docs[0]?.data().seen,
         });
+
         initialLoad = true;
       });
       return unsubscribe;

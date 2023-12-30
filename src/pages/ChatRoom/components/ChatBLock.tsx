@@ -75,7 +75,7 @@ export default function ChatBLock(props: {
           {lastMessage.sender ? (
             lastMessage.text
           ) : (
-            <div className="h-5 w-24 rounded-md skelLoading"></div>
+            <span className=" block h-5 w-24 rounded-md skelLoading"></span>
           )}
         </p>
       </div>
