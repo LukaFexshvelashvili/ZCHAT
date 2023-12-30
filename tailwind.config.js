@@ -29,6 +29,8 @@ export default {
         subText: "rgba(255, 255, 255, 0.6)",
         startText: "rgba(155, 28, 255, 1)",
         startBg: "rgba(155, 28, 255, 0.1)",
+        heartButton: "rgba(255, 255, 255, 0.20)",
+        replyToText: "rgba(255, 255, 255, 0.3)",
       },
     },
   },

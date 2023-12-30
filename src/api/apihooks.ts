@@ -16,7 +16,7 @@ export const listenLastMessages = (
   chatTo: string
 ) => {
   useEffect(() => {
-    let initialLoad = true;
+    // let initialLoad = true;
 
     if (chatTo && auth.currentUser?.uid) {
       const uID = auth.currentUser?.uid;
@@ -43,10 +43,9 @@ export const listenLastMessages = (
           text: snapshot.docs[0]?.data().text,
           seen: snapshot.docs[0]?.data().seen,
         });
-
-        initialLoad = true;
       });
       return unsubscribe;
+      // initialLoad = true;
     }
   }, []);
 };

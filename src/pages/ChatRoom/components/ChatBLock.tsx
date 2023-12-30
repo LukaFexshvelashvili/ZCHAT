@@ -34,7 +34,9 @@ export default function ChatBLock(props: {
       onClick={() => {
         props.setBlockActive(props.blockId);
         User.setActiveChat(props.blockId);
-        props.setChatLoader(true);
+        if (props.blockActive !== props.blockId) {
+          props.setChatLoader(true);
+        }
       }}
       className={`flex items-center px-5 py-8 rounded-3xl w-full h-[95px] relative  cursor-pointer transition-colors duration-[0.05s] hover:bg-chatActiveBg ${
         ifSeen == false

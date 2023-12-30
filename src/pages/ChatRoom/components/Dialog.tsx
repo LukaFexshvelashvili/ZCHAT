@@ -7,6 +7,7 @@ import { userContext } from "../../../App";
 export default function Dialog(props: {
   dialogBox: any;
   setChatLoader: Function;
+  setReply: Function;
 }) {
   const [messages, setMessages] = useState<any>([]);
   const User = useContext(userContext);
@@ -20,6 +21,7 @@ export default function Dialog(props: {
       props.dialogBox.current.scrollBy(0, 150);
     }
   };
+
   fetchMessages(setMessages, getDown, User.activeChat);
 
   useEffect(() => {
@@ -40,15 +42,21 @@ export default function Dialog(props: {
       className="max-h-[calc(100vh-100px)] min-h-[calc(100vh-100px)] overflow-x-hidden chatDialog px-6"
     >
       <DialogStarter />
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 pb-2">
         {messages
           ? messages.map((e: any, i: number) => (
               <MessageBox
                 key={i}
+                messageId={e.id}
+                senderId={e.data.uId}
+                senderName={e.data.uName}
                 own={User.user.uid == e.data.uId}
                 text={e.data.text}
                 seen={e.data.seen}
                 isLast={messages.length - 1 == i}
+                reacted={e.data.reacted}
+                setReply={props.setReply}
+                reply={e.data.reply}
                 time={
                   e.data.sendTime
                     ? getTime(

@@ -3,6 +3,7 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
   getDocs,
   getFirestore,
   onSnapshot,
@@ -33,6 +34,7 @@ window.onfocus = () => {
   notifyCount = 0;
   document.title = `ZCHAT`;
 };
+
 export const fetchMessages = async (
   getUpdatedMessages: Function,
   effect: Function,
@@ -42,12 +44,22 @@ export const fetchMessages = async (
     let initialLoad = true;
     if (chatTo && auth.currentUser?.uid) {
       const uID = auth.currentUser?.uid;
+
       const q = query(
         collection(db, "messages"),
+
         where("chatTo", "in", [chatTo, uID]),
         where("uId", "in", [chatTo, uID]),
         orderBy("sendTime")
       );
+      getDocs(q).then((data) => {
+        getUpdatedMessages(
+          data.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        );
+      });
 
       const unsubscribe = onSnapshot(q, (snapshot) => {
         if (snapshot.docs.length == 0) {
@@ -65,7 +77,6 @@ export const fetchMessages = async (
             data: doc.data(),
           }))
         );
-        initialLoad = true;
       });
       return unsubscribe;
     }
@@ -101,15 +112,19 @@ export const listenMessages = () => {
 export const sendMessage = async (
   user: any,
   message: string,
-  messageTo: string
+  messageTo: string,
+  reply: any
 ) => {
   if (message !== "" && message.replace(/\s+/g, "").length !== 0) {
     await addDoc(collection(db, "messages"), {
       uId: user.uid,
       uImage: user.photoURL,
+      uName: user.displayName,
       text: message,
       chatTo: messageTo,
       seen: false,
+      reacted: false,
+      reply: reply,
       sendTime: serverTimestamp(),
     });
   }
@@ -147,7 +162,7 @@ async function CheckLogin(result: any) {
 }
 
 export const setSeen = async (chatTo: string) => {
-  if (isWindowFocused) {
+  if (isWindowFocused && chatTo && auth.currentUser?.uid) {
     const messagesCollection = collection(db, "messages");
 
     const q = query(
@@ -161,6 +176,21 @@ export const setSeen = async (chatTo: string) => {
     querySnapshot.forEach(async (snap) => {
       const messageDocRef = doc(messagesCollection, snap.id);
       await updateDoc(messageDocRef, { seen: true, notified: true });
+    });
+  }
+};
+
+export const giveReact = async (messageId: string) => {
+  if (messageId) {
+    const docRef = doc(db, "messages", messageId);
+
+    await getDoc(docRef).then((data) => {
+      let toChange = !data.data()?.reacted;
+      updateDoc(docRef, {
+        reacted: toChange,
+      }).catch((error) => {
+        console.error("Error updating document: ", error);
+      });
     });
   }
 };

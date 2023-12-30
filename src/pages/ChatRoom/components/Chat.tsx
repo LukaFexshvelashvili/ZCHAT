@@ -1,14 +1,26 @@
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import Dialog from "./Dialog";
 import InputBLock from "./InputBLock";
 import { userContext } from "../../../App";
 import SelectChat from "./assets/SelectChat";
 import Loader from "../../../components/Loader";
 
+type TReply = {
+  replyToName: string | null;
+  replyTo: string | null;
+  replyText: string | null;
+};
+
 export default function Chat(props: {
   chatLoader: boolean;
   setChatLoader: Function;
 }) {
+  const [reply, setReply] = useState<TReply>({
+    replyTo: null,
+    replyText: null,
+    replyToName: null,
+  });
+
   const dialogBox = useRef<HTMLDivElement | null>(null);
   const User = useContext(userContext);
   return (
@@ -17,8 +29,12 @@ export default function Chat(props: {
 
       {User.activeChat ? (
         <>
-          <Dialog dialogBox={dialogBox} setChatLoader={props.setChatLoader} />
-          <InputBLock dialogBox={dialogBox} />
+          <Dialog
+            setReply={setReply}
+            dialogBox={dialogBox}
+            setChatLoader={props.setChatLoader}
+          />
+          <InputBLock dialogBox={dialogBox} reply={reply} setReply={setReply} />
         </>
       ) : (
         <SelectChat />
