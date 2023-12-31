@@ -18,6 +18,8 @@ export const listenLastMessages = (
   chatTo: string
 ) => {
   useEffect(() => {
+    let initialLoad = true;
+
     if (chatTo && auth.currentUser?.uid) {
       const uID = auth.currentUser?.uid;
 
@@ -28,6 +30,13 @@ export const listenLastMessages = (
         orderBy("sendTime", "desc"),
         limit(1)
       );
+      getDocs(q).then((data) => {
+        getLastMessages({
+          sender: data.docs[0]?.data().uId,
+          text: data.docs[0]?.data().text,
+          seen: data.docs[0]?.data().seen,
+        });
+      });
       const unsubscribe = onSnapshot(q, (snapshot) => {
         if (snapshot.docs.length == 0) {
           getLastMessages({
@@ -37,7 +46,10 @@ export const listenLastMessages = (
           });
           return;
         }
-
+        if (initialLoad) {
+          initialLoad = false;
+          return;
+        }
         getLastMessages({
           sender: snapshot.docs[0]?.data().uId,
           text: snapshot.docs[0]?.data().text,
@@ -58,7 +70,7 @@ export const getCharData = async (uID: string) => {
     console.log(error);
   }
 };
-export const addConversation = async (uID: string) => {
+export const addConversation = async (uID: string, isWaiting: Function) => {
   if (uID !== auth.currentUser?.uid) {
     const myDataFetch = query(
       collection(db, "accounts"),
@@ -67,6 +79,7 @@ export const addConversation = async (uID: string) => {
     );
     const myData = await getDocs(myDataFetch);
     let myFriendsList = myData.docs[0].data().friends;
+
     if (!myFriendsList.includes(uID)) {
       const q = query(collection(db, "accounts"), where("uId", "==", uID));
       const getData = await getDocs(q);
@@ -76,17 +89,25 @@ export const addConversation = async (uID: string) => {
           friends: [...getData.docs[0].data().friends, auth.currentUser?.uid],
         });
       } else {
+        isWaiting(false);
+
         return 2;
       }
       const docRef = doc(db, "accounts", myData.docs[0].id);
       await updateDoc(docRef, {
         friends: [...myData.docs[0].data().friends, uID],
       });
+      isWaiting(false);
+
       return 10;
     } else {
+      isWaiting(false);
+
       return 5;
     }
   } else {
+    isWaiting(false);
+
     return 3;
   }
 };

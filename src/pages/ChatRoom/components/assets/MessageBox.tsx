@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { giveReact } from "../../../../api/apifunctions";
 import { auth } from "../../../../api/firebase";
 import { HeartIcon, ReplyIcon } from "../../../../icons/icons";
@@ -33,8 +34,19 @@ export default function MessageBox({
   isLast,
   reply,
 }: TMessageBox) {
+  const [react, setRreact] = useState(reacted);
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
   const handleReact = () => {
+    clickDisable();
+    setRreact((state) => !state);
     giveReact(messageId);
+  };
+  const clickDisable = () => {
+    setButtonDisabled(true);
+
+    setTimeout(() => {
+      setButtonDisabled(false);
+    }, 500);
   };
   const handleReply = () => {
     setReply({ replyTo: senderId, replyText: text, replyToName: senderName });
@@ -76,11 +88,13 @@ export default function MessageBox({
       <div className="px-3 py-2 bg-myTextBox rounded-xl text-myText relative ">
         <button
           onClick={handleReply}
-          className="absolute right-[calc(100%+80px)] opacity-0 transition-opacity group-hover:opacity-100"
+          className={`absolute opacity-0 transition-opacity group-hover:opacity-100 ${
+            isLast ? " right-[calc(100%+120px)]" : " right-[calc(100%+80px)]"
+          }`}
         >
           <ReplyIcon className="h-6 aspect-square [&>path]:fill-heartButton" />
         </button>
-        {reacted ? (
+        {react ? (
           <div className="absolute left-[-5px] bottom-[-5px]">
             <HeartIcon className="h-4 aspect-square" />
           </div>
@@ -97,7 +111,7 @@ export default function MessageBox({
     >
       {reply.replyText ? (
         <>
-          <div className=" absolute bottom-[100%] left-[0  text-replyToText flex items-center text-sm mb-2">
+          <div className=" absolute bottom-[100%] left-[0]  text-replyToText flex items-center text-sm mb-2">
             <div className=" bg-inputBg px-3 py-[4px] rounded-lg">
               {reply.replyText}
             </div>
@@ -113,7 +127,10 @@ export default function MessageBox({
       ) : null}
       <button
         onClick={handleReact}
-        className="absolute right-[calc(100%+8px)] opacity-0 transition-opacity group-hover:opacity-100"
+        disabled={isButtonDisabled}
+        className={`absolute right-[calc(100%+8px)] opacity-0 transition-opacity group-hover:opacity-100 ${
+          isButtonDisabled ? "invisible" : "visible"
+        }`}
       >
         <HeartIcon className="h-4 aspect-square [&>path]:fill-heartButton" />
       </button>
@@ -122,7 +139,7 @@ export default function MessageBox({
         onDoubleClick={handleReact}
         className="px-3 py-2 text-white bg-main rounded-xl relative "
       >
-        {reacted ? (
+        {react ? (
           <div className="absolute right-[-5px] bottom-[-5px]">
             <HeartIcon className="h-4 aspect-square" />
           </div>

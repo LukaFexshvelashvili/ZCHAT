@@ -31,7 +31,7 @@ export const getFriendChats = async (setAccounts: Function) => {
     limit(1)
   );
   const myData = await getDocs(myDataFetch);
-  if (!myData.empty) {
+  if (!myData.empty && myData.docs[0].data().friends) {
     const q = query(
       collection(db, "accounts"),
       where(

@@ -47,7 +47,9 @@ body {
 .iconButton {
   @apply h-[60px] aspect-square rounded-xl bg-buttonBg flex justify-center items-center border-none outline-none cursor-pointer transition-colors hover:bg-buttonHover;
 }
-
+.opShow {
+  opacity: 1;
+}
 @keyframes loader {
   from {
     transform: rotate(0deg);
