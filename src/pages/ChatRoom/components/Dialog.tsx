@@ -39,10 +39,10 @@ export default function Dialog(props: {
   return (
     <div
       ref={props.dialogBox}
-      className="max-h-[calc(100vh-100px)] min-h-[calc(100vh-100px)] overflow-x-hidden chatDialog px-6"
+      className="max-h-[calc(100vh-100px)] min-h-[calc(100vh-100px)] overflow-x-hidden chatDialog px-6 relative"
     >
       <DialogStarter />
-      <div className="flex flex-col gap-4 pb-2">
+      <div className="flex flex-col gap-4 pb-2 pt-4">
         {messages
           ? messages.map((e: any, i: number) => (
               <MessageBox

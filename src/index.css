@@ -50,6 +50,26 @@ body {
 .opShow {
   opacity: 1;
 }
+.textGradient {
+  background: linear-gradient(to right, #007994, #8a00de);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.imgNoDrag {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+.aNoDrag {
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
 @keyframes loader {
   from {
     transform: rotate(0deg);

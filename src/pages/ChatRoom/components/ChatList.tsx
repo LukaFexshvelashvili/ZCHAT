@@ -6,6 +6,7 @@ import { userContext } from "../../../App";
 import Loader from "../../../components/Loader";
 import AddConversationBlock from "./assets/AddConversationBlock";
 import { getFriendChats } from "../../../api/apifunctions";
+import { Alert } from "../../../components/customs";
 
 export default function ChatList(props: { setChatLoader: Function }) {
   const [loaderShow, setLoaderShow] = useState<any>(true);
@@ -14,6 +15,7 @@ export default function ChatList(props: { setChatLoader: Function }) {
   const User = useContext(userContext);
   const [chats, setChats] = useState<null | string[]>(null);
   const [blockActive, setBlockActive] = useState("");
+  const [alertId, setAlertId] = useState<any>(false);
   useEffect(() => {
     // getChats(setChats);
   }, []);
@@ -26,10 +28,13 @@ export default function ChatList(props: { setChatLoader: Function }) {
   }, [chats]);
   const handleCopy = () => {
     navigator.clipboard.writeText(User.user.uid);
-    alert("ID copied !");
+    setAlertId(
+      <Alert duration={2000} type={3} text={"ID Copied !"} fun={setAlertId} />
+    );
   };
   return (
     <>
+      {alertId}
       {addBlock ? (
         <AddConversationBlock setChats={setChats} setAddBlock={setAddBlock} />
       ) : null}

@@ -35,6 +35,8 @@ export default {
         success: "#22DC56",
         info: "#DC9222",
         warning: "#DC2243",
+        linearFirst: "#007994",
+        linearEnd: "#8A00DE",
       },
     },
   },
