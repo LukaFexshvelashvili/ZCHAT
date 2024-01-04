@@ -175,9 +175,13 @@ export const sendMessage = async (
   user: any,
   message: string,
   messageTo: string,
-  reply: any
+  reply: any,
+  image: any
 ) => {
-  if (message !== "" && message.replace(/\s+/g, "").length !== 0) {
+  if (
+    (message !== "" && message.replace(/\s+/g, "").length !== 0) ||
+    image !== null
+  ) {
     await addDoc(collection(db, "messages"), {
       uId: user.uid,
       uImage: user.photoURL,
@@ -188,6 +192,7 @@ export const sendMessage = async (
       reacted: false,
       reply: reply,
       sendTime: serverTimestamp(),
+      image: image ? image : null,
     });
   }
 };

@@ -14,6 +14,7 @@ type TMessageBox = {
   setReply: Function;
   reacted: boolean;
   isLast: boolean;
+  image: string | null;
   reply: {
     replyToName: string | null;
     replyTo: string | null;
@@ -32,6 +33,7 @@ export default function MessageBox({
   setReply,
   reacted,
   isLast,
+  image,
   reply,
 }: TMessageBox) {
   const [react, setRreact] = useState(reacted);
@@ -101,6 +103,18 @@ export default function MessageBox({
         ) : null}
 
         {text}
+        {image ? (
+          <div className="">
+            <img
+              className="max-h-[200px] max-w-[200px]"
+              src={`https://firebasestorage.googleapis.com/v0/b/react-chat-50224.appspot.com/o/${image.replace(
+                "/",
+                "%2F"
+              )}?alt=media`}
+              alt="messageImage"
+            />
+          </div>
+        ) : null}
       </div>
     </div>
   ) : (
@@ -146,6 +160,18 @@ export default function MessageBox({
         ) : null}
 
         {text}
+        {image ? (
+          <div className="">
+            <img
+              className="max-h-[200px] max-w-[200px]"
+              src={`https://firebasestorage.googleapis.com/v0/b/react-chat-50224.appspot.com/o/${image.replace(
+                "/",
+                "%2F"
+              )}?alt=media`}
+              alt="messageImage"
+            />
+          </div>
+        ) : null}
       </div>
       <p className="text-sm text-timeText mx-3 relative flex items-center">
         {time}

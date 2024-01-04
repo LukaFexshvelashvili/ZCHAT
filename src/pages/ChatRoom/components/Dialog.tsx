@@ -57,6 +57,7 @@ export default function Dialog(props: {
                 reacted={e.data.reacted}
                 setReply={props.setReply}
                 reply={e.data.reply}
+                image={e.data.image}
                 time={
                   e.data.sendTime
                     ? getTime(

@@ -214,3 +214,25 @@ export const CloseIcon = (props: any) => (
     />
   </svg>
 );
+
+export const ImageIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+    viewBox="0 0 32 32"
+    fill="none"
+  >
+    <g clip-path="url(#clip0_81_152)">
+      <path
+        d="M29.3332 21.3333V5.33332C29.3332 3.86666 28.1332 2.66666 26.6665 2.66666H10.6665C9.19984 2.66666 7.99984 3.86666 7.99984 5.33332V21.3333C7.99984 22.8 9.19984 24 10.6665 24H26.6665C28.1332 24 29.3332 22.8 29.3332 21.3333ZM14.6665 16L17.3732 19.6133L21.3332 14.6667L26.6665 21.3333H10.6665L14.6665 16ZM2.6665 7.99999V26.6667C2.6665 28.1333 3.8665 29.3333 5.33317 29.3333H23.9998V26.6667H5.33317V7.99999H2.6665Z"
+        fill="white"
+        fill-opacity="0.9"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_81_152">
+        <rect width="32" height="32" fill="white" />
+      </clipPath>
+    </defs>
+  </svg>
+);

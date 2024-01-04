@@ -10,9 +10,10 @@ import {
   where,
 } from "firebase/firestore";
 import { useEffect } from "react";
-import { db } from "./apifunctions";
-import { auth } from "./firebase";
-
+import { db, sendMessage } from "./apifunctions";
+import { auth, storage } from "./firebase";
+import { v4 } from "uuid";
+import { ref, uploadBytes } from "firebase/storage";
 export const listenLastMessages = (
   getLastMessages: Function,
   chatTo: string
@@ -109,5 +110,23 @@ export const addConversation = async (uID: string, isWaiting: Function) => {
     isWaiting(false);
 
     return 3;
+  }
+};
+
+export const uploadImage = (
+  image: any,
+  user: any,
+  message: string,
+  messageTo: string,
+  reply: any
+) => {
+  if (image) {
+    let imageUrl = `images/${image.name + v4()}`;
+    const imageRef = ref(storage, imageUrl);
+    uploadBytes(imageRef, image).then((data) => {
+      console.log(data);
+
+      sendMessage(user, message, messageTo, reply, imageUrl);
+    });
   }
 };
