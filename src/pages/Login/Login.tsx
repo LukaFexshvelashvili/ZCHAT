@@ -8,12 +8,12 @@ export default function Login() {
       <img
         src={rocketDecor}
         alt="rocketDecoration"
-        className="absolute bottom-10 z-0 left-10 h-[55%] imgNoDrag max-mobile:h-[30%]"
+        className="absolute bottom-10 z-0 left-10 h-[55%] imgNoDrag mobile:h-[30%]"
       />
       <img
         src={rocketDecor}
         alt="rocketDecoration"
-        className="absolute top-10 z-0 right-10 h-[55%] imgNoDrag rotate-180 max-mobile:h-[30%]"
+        className="absolute top-10 z-0 right-10 h-[55%] imgNoDrag rotate-180 mobile:h-[30%]"
       />
       <a
         className="h-[50px] rounded-3xl aspect-square absolute top-9 left-9 cursor-pointer aNoDrag"

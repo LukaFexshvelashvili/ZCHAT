@@ -63,7 +63,7 @@ export default function InputBLock(props: {
   return (
     <div className="w-full h-[100px] px-4 pt-3">
       <form
-        className="flex justify-center items-center w-full h-full gap-[20px]"
+        className="flex justify-center items-center w-full h-full gap-[20px] mobile:gap-0"
         onSubmit={(e) => handleSubmit(e)}
       >
         <div className="  w-[100%] h-11 relative flex justify-center items-center">
@@ -88,7 +88,7 @@ export default function InputBLock(props: {
           ) : null}
 
           <input
-            className={`h-full w-full tracking-wide px-5 bg-inputBg placeholder:text-inputPlaceholder rounded-lg border-2 border-inputBorder outline-none transition-colors focus:bg-inputBgFocus ${
+            className={`h-full w-full tracking-wide px-5 bg-inputBg placeholder:text-inputPlaceholder rounded-lg border-2 border-inputBorder outline-none transition-colors focus:bg-inputBgFocus mobile:rounded-r-none ${
               props.reply.replyText ? "rounded-t-none" : ""
             }`}
             type="text"
@@ -149,7 +149,7 @@ export default function InputBLock(props: {
 
         <button
           type="submit"
-          className="h-11 min-h-11 aspect-square cursor-pointer transition-colors bg-main rounded-lg flex items-center justify-center hover:bg-mainHover"
+          className="h-11 min-h-11 aspect-square cursor-pointer transition-colors bg-main rounded-lg flex items-center justify-center hover:bg-mainHover mobile:w-[100px] mobile:rounded-l-none"
         >
           <SendIcon className=" h-[22px] aspect-square" />
         </button>

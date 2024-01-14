@@ -35,7 +35,7 @@ export function Alert(props: {
 
   return (
     <div
-      className={`absolute top-3 right-3 ${alertBg} justify-center items-center py-3 px-8 rounded-xl tracking-wider transition-all duration-300 select-none z-30 opacity-0  ${
+      className={`absolute top-3 right-3 ${alertBg} justify-center items-center py-3 px-8 rounded-xl tracking-wider transition-all duration-300 select-none z-30 opacity-0 mobile:w-[calc(100%-120px)] mobile:left-[20px]  ${
         isVisible ? "opShow" : ""
       }`}
     >

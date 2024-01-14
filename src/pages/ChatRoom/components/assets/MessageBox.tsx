@@ -66,8 +66,16 @@ export default function MessageBox({
   return (
     <>
       {expandedImage.active && expandedImage.url ? (
-        <div className="expandImageClass absolute z-40 h-full w-full bg-[rgba(0,0,0,0.4)] top-0 left-0">
-          <img src={expandedImage.url} />
+        <div
+          onClick={() =>
+            setExpandedImage({
+              active: false,
+              url: ``,
+            })
+          }
+          className="expandImageClass absolute z-40 h-full w-full bg-[rgba(0,0,0,0.4)] top-0 left-0 flex justify-center items-center"
+        >
+          <img src={expandedImage.url} className="max-w-full max-h-full" />
         </div>
       ) : null}
       {own ? (
