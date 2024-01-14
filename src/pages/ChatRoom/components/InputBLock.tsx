@@ -34,6 +34,8 @@ export default function InputBLock(props: {
           false
         );
         setMessage("");
+        setImage(null);
+
         props.setReply({ replyTo: null, replyText: null, replyToName: null });
         if (props.dialogBox.current) {
           props.dialogBox.current.scrollBy(0, 999);
@@ -48,12 +50,11 @@ export default function InputBLock(props: {
         props.reply.replyText ? props.reply : false
       );
       setMessage("");
+      setImage(null);
       props.setReply({ replyTo: null, replyText: null, replyToName: null });
       setShowUploader(false);
       setSelectedImage(null);
-      if (props.dialogBox.current) {
-        props.dialogBox.current.scrollBy(0, 999);
-      }
+      props.dialogBox.current.scrollBy(0, 999);
     }
   };
   const closeReply = () => {
@@ -87,7 +88,7 @@ export default function InputBLock(props: {
           ) : null}
 
           <input
-            className={`h-full w-full px-5 bg-inputBg placeholder:text-inputPlaceholder rounded-lg border-2 border-inputBorder outline-none transition-colors focus:bg-inputBgFocus ${
+            className={`h-full w-full tracking-wide px-5 bg-inputBg placeholder:text-inputPlaceholder rounded-lg border-2 border-inputBorder outline-none transition-colors focus:bg-inputBgFocus ${
               props.reply.replyText ? "rounded-t-none" : ""
             }`}
             type="text"
@@ -105,6 +106,7 @@ export default function InputBLock(props: {
               ) : null}
               <input
                 type="file"
+                accept="image/png, image/gif, image/jpeg"
                 onChange={(e) => onImageChange(e)}
                 className="h-full aspect-square absolute"
               />
@@ -118,10 +120,31 @@ export default function InputBLock(props: {
           <button
             onClick={() => setShowUploader((state) => !state)}
             type="button"
-            className="absolute right-4 cursor-pointer"
+            className="absolute right-4 cursor-pointer mobile:hidden"
           >
             <ImageIcon className="h-[24px] aspect-square" />
           </button>
+          <button
+            type="button"
+            className="absolute right-4 cursor-pointer outMobile:hidden"
+          >
+            <input
+              type="file"
+              accept="image/png, image/gif, image/jpeg"
+              onChange={(e) => onImageChange(e)}
+              className="h-full aspect-square absolute left-0 top-0"
+            />
+            <ImageIcon className="h-[24px] aspect-square" />
+          </button>
+          {selectedImage ? (
+            <div className=" absolute bottom-[calc(100%+10px)]  rounded-lg h-[100px] w-full aspect-square left-0 bg-[rgba(30,30,30,0.90)] flex items-center justify-between px-5 outMobile:hidden">
+              <p className="text-sm text-subText">Selected Image:</p>
+              <img
+                src={selectedImage}
+                className="max-w-full max-h-full object-cover  rounded-lg"
+              />
+            </div>
+          ) : null}
         </div>
 
         <button

@@ -65,7 +65,7 @@ function AddConversationBlock(props: {
   return (
     <>
       {alertId}
-      <div className=" px-4 py-5 fixed  flex flex-col w-[600px] h-[300px] justify-center items-center min-h-[200px] min-w-[350px] shadow-2xl z-30 rounded-3xl bg-addBlock top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
+      <div className=" px-4 py-5 fixed  flex flex-col w-[350px] h-[300px] justify-center items-center min-h-[200px] min-w-[350px] shadow-2xl z-30 rounded-3xl bg-addBlock top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
         <button
           className="absolute top-6 right-6"
           onClick={() => props.setAddBlock(false)}

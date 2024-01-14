@@ -34,7 +34,10 @@ export const listenLastMessages = (
       getDocs(q).then((data) => {
         getLastMessages({
           sender: data.docs[0]?.data().uId,
-          text: data.docs[0]?.data().text,
+          text:
+            data.docs[0]?.data().text == ""
+              ? "Photo"
+              : data.docs[0]?.data().text,
           seen: data.docs[0]?.data().seen,
         });
       });
@@ -53,7 +56,10 @@ export const listenLastMessages = (
         }
         getLastMessages({
           sender: snapshot.docs[0]?.data().uId,
-          text: snapshot.docs[0]?.data().text,
+          text:
+            snapshot.docs[0]?.data().text == ""
+              ? "Photo"
+              : snapshot.docs[0]?.data().text,
           seen: snapshot.docs[0]?.data().seen,
         });
       });

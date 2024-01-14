@@ -14,6 +14,7 @@ export default function ChatBLock(props: {
   blockId: string;
   blockActive: string;
   setBlockActive: Function;
+  setNavShow: Function;
   groupChat?: boolean;
   name: string;
   blockImage: string;
@@ -29,16 +30,19 @@ export default function ChatBLock(props: {
   listenLastMessages(setLastMessage, props.blockId);
   const ifSeen =
     lastMessage.sender !== auth.currentUser?.uid ? lastMessage.seen : true;
+
+  const makeActive = () => {
+    props.setBlockActive(props.blockId);
+    User.setActiveChat(props.blockId);
+    props.setNavShow(false);
+    if (props.blockActive !== props.blockId) {
+      props.setChatLoader(true);
+    }
+  };
   return (
     <div
-      onClick={() => {
-        props.setBlockActive(props.blockId);
-        User.setActiveChat(props.blockId);
-        if (props.blockActive !== props.blockId) {
-          props.setChatLoader(true);
-        }
-      }}
-      className={`flex items-center px-5 py-8 rounded-3xl w-full h-[95px] relative  cursor-pointer transition-colors duration-[0.05s] hover:bg-chatActiveBg ${
+      onClick={makeActive}
+      className={`flex items-center px-5 py-8 rounded-3xl w-full h-[95px] relative cursor-pointer transition-colors duration-[0.05s] hover:bg-chatActiveBg mobile:rounded-xl mobile:py-1 mobile:h-[80px] ${
         ifSeen == false
           ? "bg-chatActiveBg"
           : props.blockActive === props.blockId
@@ -59,7 +63,7 @@ export default function ChatBLock(props: {
           </div>
         </div>
       ) : (
-        <div className="profileIcon bg-transparent h-[60px] aspect-square rounded-xl  flex justify-center items-center overflow-hidden">
+        <div className="profileIcon bg-transparent h-[60px] aspect-square rounded-xl  flex justify-center items-center overflow-hidden mobile:h-[50px]">
           {props.blockImage ? (
             <img src={props.blockImage} alt="profileImage" />
           ) : (
@@ -68,9 +72,11 @@ export default function ChatBLock(props: {
         </div>
       )}
       <div className="flex flex-col w-full">
-        <p className=" text-white text-lg ml-5 tracking-wider">{props.name}</p>
+        <p className=" text-white text-lg ml-5 tracking-wider mobile:text-sm mobile:py-1 mobile:ml-3">
+          {props.name}
+        </p>
         <p
-          className={`  text-sm ml-5 tracking-wider mb-3 ${
+          className={`  text-sm ml-5 tracking-wider mb-3 mobile:text-[13px] mobile:ml-3  ${
             ifSeen == false ? "text-white" : "text-myText"
           }`}
         >
@@ -82,7 +88,7 @@ export default function ChatBLock(props: {
         </p>
       </div>
       {ifSeen == false ? (
-        <div className=" absolute h-4 aspect-square rounded-full bg-main right-3"></div>
+        <div className=" absolute h-4 aspect-square rounded-full bg-main right-3 mobile:right-2 mobile:h-3 "></div>
       ) : null}
     </div>
   );

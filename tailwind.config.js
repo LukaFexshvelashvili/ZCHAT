@@ -39,6 +39,10 @@ export default {
         linearEnd: "#8A00DE",
       },
     },
+    screens: {
+      mobile: { max: "900px" },
+      outMobile: { min: "900px" },
+    },
   },
   plugins: [],
 };

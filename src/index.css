@@ -44,11 +44,21 @@ body {
 .skelLoading {
   animation: skeleton 2s infinite ease-in-out;
 }
+.skelLoadingImg {
+  animation: skeletonImage 2s infinite ease-in-out;
+}
 .iconButton {
   @apply h-[60px] aspect-square rounded-xl bg-buttonBg flex justify-center items-center border-none outline-none cursor-pointer transition-colors hover:bg-buttonHover;
 }
 .opShow {
   opacity: 1;
+}
+.lineBurg {
+  display: block;
+  height: 3px;
+  border-radius: 5px;
+  width: 32px;
+  background: rgb(123, 123, 123);
 }
 .textGradient {
   background: linear-gradient(to right, #007994, #8a00de);
@@ -94,5 +104,16 @@ input[type="file"]::-webkit-file-upload-button {
   }
   100% {
     background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+@keyframes skeletonImage {
+  0% {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 }
