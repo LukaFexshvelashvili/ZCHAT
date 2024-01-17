@@ -24,7 +24,7 @@ export default function Chat(props: {
   const dialogBox = useRef<HTMLDivElement | null>(null);
   const User = useContext(userContext);
   return (
-    <div className="w-8/12 relative h-full px-4 overflow-hidden flex flex-col mobile:w-full">
+    <div className="w-8/12 relative h-vh px-4 overflow-hidden flex flex-col mobile:w-full mobile:px-0">
       <Loader show={props.chatLoader} forBlock={true} className="z-10  bg-bg" />
 
       {User.activeChat ? (

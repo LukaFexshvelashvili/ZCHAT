@@ -6,7 +6,10 @@
   font-family: main;
   src: url("./fonts/Poppins-Medium.ttf");
 }
-
+@font-face {
+  font-family: mainR;
+  src: url("./fonts/Poppins-Regular.ttf");
+}
 * {
   padding: 0;
   margin: 0;
@@ -55,9 +58,9 @@ body {
 }
 .lineBurg {
   display: block;
-  height: 3px;
+  height: 2px;
   border-radius: 5px;
-  width: 32px;
+  width: 28px;
   background: rgb(123, 123, 123);
 }
 .textGradient {

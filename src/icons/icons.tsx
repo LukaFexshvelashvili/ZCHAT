@@ -236,3 +236,27 @@ export const ImageIcon = (props: any) => (
     </defs>
   </svg>
 );
+
+export const SentIcon = (props: any) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+    viewBox="0 0 18 12"
+    fill="none"
+  >
+    <rect
+      width="2.06345"
+      height="9.27718"
+      rx="1.03172"
+      transform="matrix(0.7282 -0.685365 0.7282 0.685365 0 5.68207)"
+      fill="white"
+    />
+    <rect
+      width="2.06345"
+      height="15.5127"
+      rx="1.03172"
+      transform="matrix(0.7282 0.685365 -0.7282 0.685365 16.6088 0)"
+      fill="white"
+    />
+  </svg>
+);

@@ -38,6 +38,9 @@ export default {
         linearFirst: "#007994",
         linearEnd: "#8A00DE",
       },
+      fontFamily: {
+        mainR: "mainR",
+      },
     },
     screens: {
       mobile: { max: "900px" },

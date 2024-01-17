@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { giveReact } from "../../../../api/apifunctions";
 import { auth } from "../../../../api/firebase";
-import { HeartIcon, ReplyIcon } from "../../../../icons/icons";
+import { HeartIcon, ReplyIcon, SentIcon } from "../../../../icons/icons";
 
 type TMessageBox = {
   messageId: string;
@@ -73,52 +73,50 @@ export default function MessageBox({
               url: ``,
             })
           }
-          className="expandImageClass absolute z-40 h-full w-full bg-[rgba(0,0,0,0.4)] top-0 left-0 flex justify-center items-center"
+          className="expandImageClass fixed z-40 h-full w-full bg-[rgba(0,0,0,0.4)]  top-0 left-0 flex justify-center items-center"
         >
           <img src={expandedImage.url} className="max-w-full max-h-full" />
         </div>
       ) : null}
       {own ? (
         <div
-          className={`flex items-center justify-end w-auto group relative ${
+          className={`flex items-center justify-end w-auto group relative   ${
             reply.replyText ? "mt-10" : ""
           }`}
         >
           {reply.replyText ? (
             <>
-              <div className=" absolute bottom-[100%] right-[20px]  text-replyToText flex items-center text-sm mb-2">
-                <span className="mx-2 tracking-widest">
-                  {" "}
-                  Replied{" "}
-                  {reply.replyTo !== auth.currentUser?.uid
-                    ? reply.replyToName
-                    : "You"}
-                  {": "}
-                </span>
-                <div className=" bg-inputBg px-3 py-[4px] rounded-lg">
-                  {reply.replyText}
+              <div className=" absolute bottom-[100%] right-[20px]  text-replyToText flex items-center text-sm mb-2 mobile:text-[13px] mobile:right-[0px]">
+                <span className="mx-2 tracking-widest">Replied:</span>
+                <div className=" bg-inputBg px-3 py-[4px] rounded-lg mobile:text-sm overflow-hidden max-w-[280px] mobile:max-w-[200px]">
+                  <p className="whitespace-nowrap overflow-hidden text-ellipsis">
+                    {reply.replyText}
+                  </p>
                 </div>
               </div>
             </>
           ) : null}
-          <p className="text-sm text-timeText mx-3">
-            {isLast
-              ? time !== "Sending..."
-                ? seen
-                  ? "seen"
-                  : "sent"
-                : ""
-              : null}{" "}
-            {time}
+          <div className="absolute right-[0px] bottom-[-20px] z-10">
+            <p className="text-sm text-timeText mx-3 mobile:text-[12px]">
+              {isLast
+                ? time !== "sending..."
+                  ? seen
+                    ? "seen"
+                    : "sent"
+                  : ""
+                : null}{" "}
+            </p>
+          </div>
+          <p className="text-sm text-timeText mx-3 mobile:text-[12px]">
+            <span className="select-none transition-opacity opacity-0 group-hover:opacity-100">
+              {time}
+            </span>
           </p>
-          <div className="px-3 py-2 bg-myTextBox rounded-xl text-myText relative ">
+
+          <div className="px-3 py-2 bg-myTextBox font-mainR rounded-xl text-myText relative mobile:text-sm tracking-wider max-w-[450px] mobile:max-w-[250px] flex items-center">
             <button
               onClick={handleReply}
-              className={`absolute opacity-0 transition-opacity group-hover:opacity-100 ${
-                isLast
-                  ? " right-[calc(100%+120px)]"
-                  : " right-[calc(100%+80px)]"
-              }`}
+              className={`absolute select-none transition-opacity opacity-0 group-hover:opacity-100 right-[calc(100%+80px)] mobile:right-[calc(100%+70px)] `}
             >
               <ReplyIcon className="h-6 aspect-square [&>path]:fill-heartButton" />
             </button>
@@ -165,7 +163,7 @@ export default function MessageBox({
         >
           {reply.replyText ? (
             <>
-              <div className=" absolute bottom-[100%] left-[0]  text-replyToText flex items-center text-sm mb-2">
+              <div className=" absolute bottom-[100%] left-[0]  text-replyToText flex items-center text-sm mb-2 ">
                 <div className=" bg-inputBg px-3 py-[4px] rounded-lg">
                   {reply.replyText}
                 </div>
@@ -182,7 +180,7 @@ export default function MessageBox({
           <button
             onClick={handleReact}
             disabled={isButtonDisabled}
-            className={`absolute right-[calc(100%+8px)] opacity-0 transition-opacity group-hover:opacity-100 ${
+            className={`absolute right-[calc(100%+8px)] opacity-0 transition-opacity group-hover:opacity-100  mobile:hidden ${
               isButtonDisabled ? "invisible" : "visible"
             }`}
           >
@@ -191,7 +189,7 @@ export default function MessageBox({
 
           <div
             onDoubleClick={handleReact}
-            className="px-3 py-2 text-white bg-main rounded-xl relative "
+            className="px-3 py-2 text-white bg-main rounded-xl relative mobile:text-sm max-w-[450px] mobile:max-w-[250px] font-mainR"
           >
             {react ? (
               <div className="absolute right-[-5px] bottom-[-5px]">
@@ -218,11 +216,11 @@ export default function MessageBox({
               </div>
             ) : null}
           </div>
-          <p className="text-sm text-timeText mx-3 relative flex items-center">
+          <p className="text-sm text-timeText mx-3 relative flex items-center mobile:text-[12px] select-none transition-opacity opacity-0 group-hover:opacity-100">
             {time}
             <button
               onClick={handleReply}
-              className="absolute left-[calc(100%+8px)] opacity-0 transition-opacity group-hover:opacity-100"
+              className="absolute left-[calc(100%+8px)] select-none transition-opacity opacity-0 group-hover:opacity-100"
             >
               <ReplyIcon className="h-6 aspect-square [&>path]:fill-heartButton" />
             </button>
