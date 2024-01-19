@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { CloseIcon, ImageIcon, SendIcon } from "../../../icons/icons";
 import { sendMessage } from "../../../api/apifunctions";
 import { userContext } from "../../../App";
@@ -9,11 +9,20 @@ export default function InputBLock(props: {
   reply: any;
   setReply: Function;
 }) {
+  const imageGetRef = useRef<null | HTMLInputElement>(null);
+
   const User = useContext(userContext);
   const [message, setMessage] = useState("");
   const [image, setImage] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState<any>(null);
   const [showUploader, setShowUploader] = useState(false);
+  const getImage = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const clickEvent = new MouseEvent("click");
+    if (imageGetRef.current) {
+      imageGetRef.current.dispatchEvent(clickEvent);
+    }
+  };
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -65,7 +74,7 @@ export default function InputBLock(props: {
         className="flex justify-center items-center w-full h-full gap-[20px] mobile:gap-0"
         onSubmit={(e) => handleSubmit(e)}
       >
-        <div className="  w-[100%] h-11 relative flex justify-center items-center">
+        <div className="  w-full h-11 relative flex justify-center items-center">
           {props.reply.replyText ? (
             <div className="w-[calc(100%)] font-mainR absolute h-8 border-t-2  border-l-2 border-r-2 border-inputBorder text-sm tracking-wider bg-inputBg rounded-t-lg bottom-[calc(100%)] flex items-center px-4">
               <span className=" text-replyToText pr-1 mobile:text-[12px] min-w-[65px]">
@@ -122,14 +131,17 @@ export default function InputBLock(props: {
             <ImageIcon className="h-[24px] aspect-square" />
           </button>
           <button
+            onClick={(e) => getImage(e)}
             type="button"
-            className="absolute right-4 cursor-pointer outMobile:hidden"
+            className="absolute right-4 cursor-pointer outMobile:hidden h-[24px] aspect-square"
           >
             <input
+              ref={imageGetRef}
               type="file"
+              required={false}
               accept="image/png, image/gif, image/jpeg"
               onChange={(e) => onImageChange(e)}
-              className="h-full aspect-square absolute left-0 top-0"
+              className="h-[24px] aspect-square absolute left-0 top-0 hidden"
             />
             <ImageIcon className="h-[24px] aspect-square" />
           </button>
@@ -146,7 +158,7 @@ export default function InputBLock(props: {
 
         <button
           type="submit"
-          className="h-11 min-h-11 aspect-square cursor-pointer transition-colors bg-main rounded-lg flex items-center justify-center hover:bg-mainHover mobile:w-[100px] mobile:rounded-l-none"
+          className="h-11 min-h-11 aspect-square cursor-pointer transition-colors bg-main rounded-lg flex items-center justify-center hover:bg-mainHover mobile:w-[100px] mobile:min-w-[100px] mobile:rounded-l-none"
         >
           <SendIcon className=" h-[22px] aspect-square" />
         </button>

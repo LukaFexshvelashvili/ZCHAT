@@ -129,9 +129,7 @@ export const uploadImage = (
   if (image) {
     let imageUrl = `images/${image.name + v4()}`;
     const imageRef = ref(storage, imageUrl);
-    uploadBytes(imageRef, image).then((data) => {
-      console.log(data);
-
+    uploadBytes(imageRef, image).then(() => {
       sendMessage(user, message, messageTo, reply, imageUrl);
     });
   }

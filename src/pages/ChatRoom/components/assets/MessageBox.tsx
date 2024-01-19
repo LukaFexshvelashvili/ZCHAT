@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { giveReact } from "../../../../api/apifunctions";
 import { auth } from "../../../../api/firebase";
-import { HeartIcon, ReplyIcon, SentIcon } from "../../../../icons/icons";
+import { HeartIcon, ReplyIcon } from "../../../../icons/icons";
 
 type TMessageBox = {
   messageId: string;
@@ -164,15 +164,12 @@ export default function MessageBox({
           {reply.replyText ? (
             <>
               <div className=" absolute bottom-[100%] left-[0]  text-replyToText flex items-center text-sm mb-2 ">
-                <div className=" bg-inputBg px-3 py-[4px] rounded-lg">
+                <div className=" bg-inputBg px-3 py-[4px] rounded-lg mobile:text-[13px]">
                   {reply.replyText}
                 </div>
                 <span className="mx-2 tracking-widest">
                   {" "}
-                  Replied{" "}
-                  {reply.replyTo !== auth.currentUser?.uid
-                    ? reply.replyToName
-                    : "You"}
+                  Replied {reply.replyTo !== auth.currentUser?.uid ? "" : "You"}
                 </span>
               </div>
             </>

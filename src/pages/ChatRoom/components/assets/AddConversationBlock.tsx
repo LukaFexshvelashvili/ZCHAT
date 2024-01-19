@@ -60,7 +60,6 @@ function AddConversationBlock(props: {
       alert("Wrong ID");
     }
   };
-  console.log(alertId);
 
   return (
     <>
